@@ -7,10 +7,30 @@ This project is not affiliated with WHDLoad, Retroplay or grandis.nu. It hosts n
 the public FTP server and downloads from it on your request. Please respect the server and the rights of the
 software authors.
 
-## Requirements
+## Download
 
-- Python 3.10+ with tkinter, no third-party packages.
-- Easiest start: double-click `start_macos.command`, `start_windows.bat` or `start_linux.sh`. It creates a `.venv` and opens the GUI. Or run `python gui.py`.
+Get the latest build from the [Releases page](https://github.com/dimfilhub/WHDLoadDownloader/releases/latest). Each
+release has two packages per OS:
+
+| Package | What it is | Needs Python? |
+| --- | --- | --- |
+| `WHDLoadDownloader-<version>-windows.zip`, `-macos.zip`, `-linux.tar.gz` | Standalone app (recommended) | No |
+| `WHDLoadDownloader-<version>-<os>-source.zip` / `.tar.gz` | The source with a launcher script | Yes, 3.10+ with tkinter |
+
+**Standalone app:** unzip it and run it. Downloaded archives go to a `sources/` folder next to the app (on macOS,
+next to `WHDLoadDownloader.app`).
+
+- **Windows:** unzip and double-click `WHDLoadDownloader.exe`. SmartScreen may say "Windows protected your PC":
+  click **More info**, then **Run anyway**. If the zip was blocked, right-click it, choose **Properties** and tick
+  **Unblock** before unzipping.
+- **macOS (Apple Silicon):** unzip and move `WHDLoadDownloader.app` where you like. The app is not code signed, so
+  the first time right-click it and choose **Open**, then **Open** again. If macOS still refuses, run
+  `xattr -dr com.apple.quarantine WHDLoadDownloader.app` in Terminal. On an Intel Mac, use the source package.
+- **Linux:** extract with `tar -xzf`, then run `./WHDLoadDownloader` (`chmod +x` it if needed). It is built on
+  Ubuntu 22.04, so very old distributions may not run it.
+
+**Source package:** unzip it and double-click `start_windows.bat`, `start_macos.command` or `start_linux.sh`. The
+script creates a `.venv` and opens the GUI. Or run `python gui.py` yourself. No third-party packages are needed.
 
 ## GUI
 
@@ -48,9 +68,8 @@ python build.py
 ```
 
 The result is in `dist/`: `WHDLoadDownloader.app` on macOS, a single `WHDLoadDownloader` executable on Windows and
-Linux. Downloaded archives go to a `sources/` folder next to the app. The builds are not code signed, so your OS
-warns on first launch: on macOS right-click the app and choose **Open**; on Windows click **More info**, then
-**Run anyway**.
+Linux. Downloaded archives go to a `sources/` folder next to the app. The builds are not code signed (see
+[Download](#download) for the first-launch warnings).
 
 ## License
 
