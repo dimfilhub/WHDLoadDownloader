@@ -19,6 +19,7 @@ COLUMNS = [  # (key, heading, width)
     ("platform", "Platform", 100), ("memory", "Memory", 90), ("media", "Media", 80),
     ("other", "Other tags", 130), ("ids", "ID", 90), ("filename", "File", 280),
 ]
+TOGGLE_MASK = 0x4 | (0x8 if sys.platform == "darwin" else 0)  # Control, plus Command on macOS
 FACETS = ("lang", "platform", "memory", "media", "other")
 
 
@@ -254,7 +255,7 @@ class BrowserTab(ttk.Frame):
         return ("picked",) if g.path in self.picked else ()
 
     def toggle(self, event):
-        """Click a row to select it, click again to unselect; any number of rows can be selected."""
+        """Click a row to select just it; Cmd/Ctrl+click toggles a row in the selection, Shift+click adds a range."""
         if self.tree.identify_region(event.x, event.y) not in ("cell", "tree"):
             return
         if "indicator" in self.tree.identify_element(event.x, event.y):
@@ -268,8 +269,11 @@ class BrowserTab(ttk.Frame):
         if event.state & 0x1 and self._anchor is not None:  # Shift: add the range from the last clicked row
             a, b = sorted((self._anchor, int(iid)))
             self.picked.update(g.path for g in self.rows[a:b + 1])
-        else:
+        elif event.state & TOGGLE_MASK:  # Cmd (macOS) or Ctrl: add or remove just this row
             self.picked.symmetric_difference_update({self.rows[int(iid)].path})
+            self._anchor = int(iid)
+        else:  # plain click: this row only
+            self.picked = {self.rows[int(iid)].path}
             self._anchor = int(iid)
         self.restyle()
         self.tree.focus(iid)

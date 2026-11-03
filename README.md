@@ -71,7 +71,7 @@ parsed into title, version, language, platform, memory, media, other tags and ID
 - **Clear filters** resets the search and all filters.
 - Click a column heading to sort, click again to reverse. Double-click a row to launch it in the emulator (see below); **Reveal file** shows it in Finder/Explorer.
 - Archives are grouped by the first character of the title (0-9, A-Z); the groups start collapsed (they open automatically while searching or reviewing the selection).
-- Click rows to select them (click again to unselect, Shift+click adds the range from the last clicked row; selected rows are shown in bold). Use **Review selection** to list only the selected rows (filters are ignored while it is on).
+- Click a row to select it. Cmd+click (Ctrl+click on Windows/Linux) adds or removes a row, Shift+click adds the range from the last clicked row; selected rows are shown in bold. Use **Review selection** to list only the selected rows (filters are ignored while it is on).
 - **Launch in Amiberry** (or double-click a row) runs the archive in the [Amiberry](https://github.com/BlitterStudio/amiberry) emulator. See *Running games* below.
 - **Export CSV...** saves the listed archives, with their paths, to a CSV file. **Refresh** rescans the sources folder (this also happens when you open the tab).
 
