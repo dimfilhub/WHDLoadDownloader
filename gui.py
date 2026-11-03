@@ -15,7 +15,7 @@ from tabs.downloader.tab import (APP_NAME as DOWNLOADER_NAME, HELP_SECTIONS as D
                                  README as DOWNLOADER_README, DownloaderTab)
 
 APP_NAME = "WHDLoad Downloader"
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 HERE = PROJECT_ROOT
 ABOUT_TEXT = ("WHDLoad Downloader downloads WHDLoad .lha game archives and helps you find them. The window has "
               "two tabs:\n\n"
