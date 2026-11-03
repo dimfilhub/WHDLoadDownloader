@@ -7,9 +7,10 @@ import tkinter as tk
 import tkinter.font as tkfont
 from collections import Counter
 from pathlib import Path
-from tkinter import filedialog, ttk
+from tkinter import filedialog, messagebox, ttk
 
-from common import whdparse
+from common import emulator, whdparse
+from common.emulator_dialog import EmulatorDialog
 from common.utils import bind_wheel, unbind_wheel
 
 APP_NAME = "WHDLoad Browser"
@@ -30,8 +31,9 @@ class BrowserTab(ttk.Frame):
     The folder is the StringVar shared with the other tabs; call reload() when its contents change.
     """
 
-    def __init__(self, master, sources_var, on_quit=None):
+    def __init__(self, master, sources_var, on_quit=None, settings=None):
         super().__init__(master)
+        self.settings = settings
         self.sources = sources_var
         self._on_quit = on_quit
         self.games, self.rows = [], []
@@ -74,6 +76,10 @@ class BrowserTab(ttk.Frame):
         bottom.pack(side="bottom", fill="x")
         self.status = ttk.Label(bottom, anchor="w", padding=4)
         self.status.pack(side="left", fill="x", expand=True)
+        ttk.Button(bottom, text="Emulator…", command=self.emulator_settings).pack(side="right", padx=4)
+        ttk.Button(bottom, text="Reveal file", command=lambda: self.reveal_path(self._single_pick())).pack(side="right")
+        ttk.Button(bottom, text="Launch in Amiberry", command=lambda: self.launch(self._single_pick())
+                   ).pack(side="right", padx=4)
         body = ttk.PanedWindow(self, orient="horizontal")
         body.pack(fill="both", expand=True)
 
@@ -104,7 +110,7 @@ class BrowserTab(ttk.Frame):
         self.tree.pack(side="left", fill="both", expand=True)
         sb.pack(side="left", fill="y")
         self.tree.bind("<Button-1>", self.toggle)
-        self.tree.bind("<Double-1>", self.reveal)
+        self.tree.bind("<Double-1>", self.on_double_click)
         bold = tkfont.nametofont("TkDefaultFont").copy()
         bold.configure(weight="bold")
         self._bold = bold  # keep a reference so it is not garbage collected
@@ -302,19 +308,59 @@ class BrowserTab(ttk.Frame):
             self.tree.item(str(i), tags=self._tags(g))
         self._update_status()
 
-    def reveal(self, _event):
-        iid = self.tree.identify_row(_event.y)
+    def on_double_click(self, event):
+        iid = self.tree.identify_row(event.y)
         if iid and iid.startswith("g:"):
             return "break"  # a group row was already toggled by the click
-        if not iid:
+        if iid:
+            self.launch(self.rows[int(iid)].path)
+
+    def _single_pick(self):
+        """The one selected archive, or None (with a hint) when none or several are selected."""
+        if len(self.picked) != 1:
+            messagebox.showinfo("Select one archive", "Click one archive in the list first (or double-click it to launch).")
+            return None
+        return next(iter(self.picked))
+
+    def reveal_path(self, p):
+        if not p:
             return
-        p = self.rows[int(iid)].path
         if sys.platform == "darwin":
             subprocess.run(["open", "-R", str(p)])
         elif sys.platform.startswith("win"):
             subprocess.run(["explorer", "/select,", str(p)])
         else:
             subprocess.run(["xdg-open", str(p.parent)])
+
+    # ---------- emulator ----------
+    def emulator_settings(self):
+        if self.settings is not None:
+            EmulatorDialog(self.winfo_toplevel(), self.settings)
+
+    def _emulator(self):
+        saved = self.settings.get("amiberry") if self.settings else None
+        return emulator.resolve_executable(saved) or emulator.detect()
+
+    def launch(self, path):
+        """Run one archive in Amiberry, after checking the emulator is set up."""
+        if not path:
+            return
+        exe = self._emulator()
+        if not exe:
+            messagebox.showinfo("Emulator needed", "Choose the Amiberry app first (Emulator… button).")
+            self.emulator_settings()
+            return
+        problems = emulator.missing_setup(exe)
+        if problems and not messagebox.askyesno(
+                "Amiberry is not ready", "\n".join(problems) + "\n\nLaunch anyway?"):
+            return
+        try:
+            emulator.launch(exe, path, fullscreen=bool(self.settings.get("fullscreen")),
+                            scanlines=bool(self.settings.get("scanlines")))
+        except OSError as e:
+            messagebox.showerror("Could not start Amiberry", str(e))
+        else:
+            self.status.config(text=f"Launched {path.name} in Amiberry")
 
     def export(self):
         f = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("CSV", "*.csv")])

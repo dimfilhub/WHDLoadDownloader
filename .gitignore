@@ -13,3 +13,4 @@ dist/
 *.tar.gz
 build/
 *.spec
+emulator/

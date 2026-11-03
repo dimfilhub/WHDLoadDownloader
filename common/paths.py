@@ -15,4 +15,5 @@ def _app_dir():
     return exe.parents[3] if sys.platform == "darwin" else exe.parent
 
 
-DEFAULT_SOURCES_DIR = _app_dir() / "sources"   # where downloaded .lha archives go by default
+APP_DIR = _app_dir()                            # next to the app: sources/ and an optional emulator/
+DEFAULT_SOURCES_DIR = APP_DIR / "sources"   # where downloaded .lha archives go by default

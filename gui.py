@@ -35,7 +35,7 @@ def show_about(parent):
 def show_help(parent):
     HelpDialog(parent, APP_NAME, docs=[
         (f"{DOWNLOADER_NAME} tab", DOWNLOADER_README, DOWNLOADER_HELP_SECTIONS),
-        (f"{BROWSER_NAME} tab", HERE / "README.md", ("WHDLoad Browser",)),
+        (f"{BROWSER_NAME} tab", HERE / "README.md", ("WHDLoad Browser", "Running games")),
     ])
 
 
@@ -59,7 +59,7 @@ def main():
     downloader = DownloaderTab(tabs, sources, on_destination_change=on_sources_changed,
                                on_quit=root.destroy, on_download_done=lambda: browser.reload())
     tabs.add(downloader, text=DOWNLOADER_NAME)
-    browser = BrowserTab(tabs, sources, on_quit=downloader.quit_app)
+    browser = BrowserTab(tabs, sources, on_quit=downloader.quit_app, settings=settings)
     tabs.add(browser, text=BROWSER_NAME)
     tabs.bind("<<NotebookTabChanged>>", lambda _e: browser.reload() if tabs.select() == str(browser) else None)
 
@@ -68,6 +68,9 @@ def main():
     help_menu.add_command(label=f"{APP_NAME} Help", command=lambda: show_help(root))
     help_menu.add_command(label=f"About {APP_NAME}…", command=lambda: show_about(root))
     menubar.add_cascade(label="Help", menu=help_menu)
+    tools_menu = tk.Menu(menubar, tearoff=False)
+    tools_menu.add_command(label="Emulator (Amiberry)…", command=browser.emulator_settings)
+    menubar.insert_cascade(1, label="Tools", menu=tools_menu)
     root.config(menu=menubar)
     root.protocol("WM_DELETE_WINDOW", downloader.quit_app)  # confirms if an FTP session is open
     root.mainloop()

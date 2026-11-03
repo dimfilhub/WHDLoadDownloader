@@ -69,15 +69,42 @@ parsed into title, version, language, platform, memory, media, other tags and ID
 - **Latest version only** keeps just the newest version of each game variant.
 - **Only entries without ID** shows archives whose name has no ID.
 - **Clear filters** resets the search and all filters.
-- Click a column heading to sort, click again to reverse. Double-click a row to reveal the file in Finder/Explorer.
+- Click a column heading to sort, click again to reverse. Double-click a row to launch it in the emulator (see below); **Reveal file** shows it in Finder/Explorer.
 - Archives are grouped by the first character of the title (0-9, A-Z); the groups start collapsed (they open automatically while searching or reviewing the selection).
 - Click rows to select them (click again to unselect, Shift+click adds the range from the last clicked row; selected rows are shown in bold). Use **Review selection** to list only the selected rows (filters are ignored while it is on).
+- **Launch in Amiberry** (or double-click a row) runs the archive in the [Amiberry](https://github.com/BlitterStudio/amiberry) emulator. See *Running games* below.
 - **Export CSV...** saves the listed archives, with their paths, to a CSV file. **Refresh** rescans the sources folder (this also happens when you open the tab).
 
 ### WHDLoad Downloader
 
 Connects to the FTP server, lists the packs and downloads the archives you pick. See
 [tabs/downloader/README.md](tabs/downloader/README.md) for details.
+
+## Running games
+
+The Browser starts games in the Amiberry emulator, which must be installed separately. This app does not include
+or download any Kickstart ROMs.
+
+1. Get [Amiberry](https://github.com/BlitterStudio/amiberry/releases). The app finds it in an `emulator/` folder next
+   to the app, in `/Applications`, or on your `PATH`; otherwise choose it in **Emulator...** (Browser tab) or
+   **Tools > Emulator (Amiberry)...**.
+2. Copy your own Kickstart ROM files (`.rom`, for example Kickstart 1.3 and 3.1) into Amiberry's ROMs folder. Click
+   **Open ROMs folder** in the Emulator window to open it (on macOS it is `~/Documents/Amiberry/ROMs`). This app
+   cannot supply ROMs. Without a suitable one, Amiberry uses its free AROS ROM, which many games do not run on.
+3. Click **Download WHDLoad files** in the same window, once. Amiberry itself downloads WHDLoad (by Bert Jahn, from
+   [whdload.de](https://www.whdload.de)) plus helper files from Aminet into its WHDBoot folder. You are asked to confirm
+   first. It needs an internet connection and takes about a minute. Repeat it to update. This app does not
+   download or ship WHDLoad; see whdload.de for its licence.
+4. Optional: tick **Run games fullscreen** and **Scanlines (CRT effect)** in the Emulator window.
+5. Select an archive and click **Launch in Amiberry**, or double-click it.
+
+Amiberry recognises the archive and sets up the matching Amiga model, memory and slave automatically.
+
+**Amiberry still uses the AROS ROM after you added yours?** Amiberry scans the ROMs folder once and remembers the
+result. While Amiberry is running, press **F12** to open its settings and rescan the ROMs (Paths panel), then
+launch the game again. If that does not help, quit Amiberry and delete its `amiberry.ini` (on macOS
+`~/Library/Application Support/Amiberry/amiberry.ini`; it only holds window positions and this ROM list) so it scans
+again on the next start.
 
 ## Building a standalone app
 
