@@ -1,0 +1,13 @@
+.venv/
+.idea/
+__pycache__/
+*.pyc
+.DS_Store
+
+# downloaded archives stay local
+/sources/*
+!/sources/.gitkeep
+.vscode/
+dist/
+*.zip
+*.tar.gz
