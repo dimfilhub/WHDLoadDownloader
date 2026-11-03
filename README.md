@@ -7,6 +7,28 @@ This project is not affiliated with WHDLoad, Retroplay or grandis.nu. It hosts n
 the public FTP server and downloads from it on your request. Please respect the server and the rights of the
 software authors.
 
+## Screenshots
+
+**Downloader: connect to the FTP server**
+
+![Downloader tab, disconnected](images/screenshots/screenshot-1.jpg)
+
+**Downloader: browse the packs and pick what to download**
+
+![Downloader tab, connected, showing the pack tree](images/screenshots/screenshot-2.jpg)
+
+**Browser: search and filter the downloaded archives**
+
+![Browser tab with filters and archive list](images/screenshots/screenshot-3.jpg)
+
+**About**
+
+![About window](images/screenshots/screenshot-4.jpg)
+
+**Help**
+
+![Help window](images/screenshots/screenshot-5.jpg)
+
 ## Download
 
 Get the latest build from the [Releases page](https://github.com/dimfilhub/WHDLoadDownloader/releases/latest). Each
