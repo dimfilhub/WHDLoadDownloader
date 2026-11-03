@@ -25,7 +25,7 @@ jobs:
             name: linux
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Work out the version
         shell: bash
@@ -37,7 +37,7 @@ jobs:
             echo "TAG=v$(sed -n 's/^VERSION = "\(.*\)"/\1/p' gui.py)" >> "$GITHUB_ENV"
           fi
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
@@ -103,7 +103,7 @@ jobs:
           tar -czf "$SRC.tar.gz" -C pkg "$SRC"
           tar -czf "$APP.tar.gz" -C dist WHDLoadDownloader
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: WHDLoadDownloader-${{ matrix.name }}
           path: WHDLoadDownloader-*
