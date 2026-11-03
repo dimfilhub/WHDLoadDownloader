@@ -37,6 +37,21 @@ parsed into title, version, language, platform, memory, media, other tags and ID
 Connects to the FTP server, lists the packs and downloads the archives you pick. See
 [tabs/downloader/README.md](tabs/downloader/README.md) for details.
 
+## Building a standalone app
+
+To make a double-clickable app that needs no Python, build it on the OS you are targeting (PyInstaller cannot
+cross-compile):
+
+```sh
+pip install pyinstaller
+python build.py
+```
+
+The result is in `dist/`: `WHDLoadDownloader.app` on macOS, a single `WHDLoadDownloader` executable on Windows and
+Linux. Downloaded archives go to a `sources/` folder next to the app. The builds are not code signed, so your OS
+warns on first launch: on macOS right-click the app and choose **Open**; on Windows click **More info**, then
+**Run anyway**.
+
 ## License
 
 [MIT](LICENSE)
